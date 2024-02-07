@@ -57,7 +57,7 @@
       "SecRule ARGS \"@contains test \" \"id:1,pass,t:trim\""
     ]
   },
-    {
+  {
     "enabled": 1,
     "version_min": 300000,
     "version_max": 0,
@@ -113,6 +113,35 @@
     "rules": [
       "SecRuleEngine On",
       "SecRule ARGS \"@contains test \" \"id:1,pass,t:trim,t:lowercase\""
+    ]
+  },
+  {
+    "enabled": 1,
+    "version_min": 300000,
+    "version_max": 0,
+    "title": "Testing utf8-to-unicode :: invalid first byte sequence",
+    "client": {
+      "ip": "200.249.12.31",
+      "port": 2313
+    },
+    "server": {
+      "ip": "200.249.12.31",
+      "port": 80
+    },
+    "request": {
+      "headers": {
+        "Host": "host.invalid"
+      },
+      "uri": "/?arg=f6f6f6f6",
+      "method": "GET",
+      "http_version": 1.1
+    },
+    "expected": {
+      "http_code": 442
+    },
+    "rules": [
+      "SecRuleEngine On",
+      "SecRule ARGS \"@streq f6f6f6f6\" \"id:1,deny,status=442,t:none,t:trim,t:hexdecode,t:utf8toUnicode,t:hexencode\""
     ]
   }
 ]
