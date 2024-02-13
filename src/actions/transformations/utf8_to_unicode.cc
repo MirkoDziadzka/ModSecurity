@@ -206,14 +206,11 @@ char *Utf8ToUnicode::inplace(unsigned char *input,
                     *changed = 1;
                 }
             }
-        } else if ((c & 0xF8) == 0xF0) {
+        } else if ((c & 0xF8) == 0xF0 && c < 0xF5) {
             /* If first byte begins with binary 11110 it
              * is four byte encoding
+             * restrict characters to UTF-8 range (U+0000 - U+10FFFF)
              */
-            /* restrict characters to UTF-8 range (U+0000 - U+10FFFF) */
-            if (c >= 0xF5) {
-                *data++ = c;
-            }
             /* check we have at least four bytes */
             if (bytes_left < 4) {
                 /* check second byte starts with binary 10 */
